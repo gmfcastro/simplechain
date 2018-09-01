@@ -1,10 +1,10 @@
 # Blockchain Data
 
-Blockchain has the potential to change the way that the world approaches data. Develop Blockchain skills by understanding the data model behind Blockchain by developing your own simplified private blockchain.
+Blockchain has the potential to change the way that the world approaches data.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will get you a copy of the project up and running on your local machine for development.
 
 ### Prerequisites
 
