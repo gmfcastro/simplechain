@@ -1,0 +1,4 @@
+.DS_Store
+chaindata/**/*
+package-lock.json
+node_modules/**/*
