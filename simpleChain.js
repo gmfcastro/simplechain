@@ -23,13 +23,17 @@ class Blockchain {
 
   addBlock(newBlock) {
     return new Promise(resolve => {
-        chainDB.getCurrentBlock().then(previousBlock => {
+      this.getBlockHeight()
+      .then(previousBlock => {
         newBlock.time = this.getCurrentTimeUTC();
         newBlock.previousBlockHash = previousBlock ? previousBlock.hash : "";
         newBlock.height = previousBlock ? previousBlock.height + 1 : 0;
         newBlock.hash = this.generateBlockHash(newBlock);
         chainDB.add(newBlock).then(() => {
           resolve(newBlock.height);
+        })
+        .catch(error => {
+          console.error("Unable to add the block " + newBlock.height + "Due to error: ", error);
         });
       });
     });
@@ -37,6 +41,16 @@ class Blockchain {
 
   getBlock(blockHeight) {
     return chainDB.get(blockHeight);
+  }
+
+  getBlockHeight() {
+    return new Promise((resolve, reject) => {
+      chainDB.getCurrentBlock()
+      .then(block => {
+        resolve(block.height);
+      })
+      .catch(error => reject(error));
+    });
   }
 
   generateGenesisBlock() {
