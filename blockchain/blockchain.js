@@ -34,7 +34,7 @@ export default class Blockchain {
     }
   
     getBlock(blockHeight) {
-      return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.resolve();
+      return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.reject();
     }
   
     getBlockHeight() {
