@@ -5,8 +5,14 @@ const db = level(chainDB);
 const get = key => {
   return new Promise((resolve, reject) => {
     db.get(key, (error, value) => {
-      if (error) reject(error);
-      resolve(JSON.parse(value));
+      if (error) {
+        let returnError = error;
+        if(error instanceof level.errors.NotFoundError) {
+          returnError = Object.assign({type: "NOT_FOUND"} ,error);
+        }
+        reject(returnError);
+      }
+      value && resolve(JSON.parse(value))
     })
   });
 }

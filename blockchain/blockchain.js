@@ -23,7 +23,7 @@ export default class Blockchain {
             newBlock.previousBlockHash = previousBlock ? previousBlock.hash : "";
             newBlock.hash = this.generateBlockHash(newBlock);
             chainDB.add(newBlock).then(() => {
-              resolve(newBlock.height);
+              resolve(newBlock);
             })
             .catch(error => {
               console.error("Unable to add the block " + newBlock.height + "Due to error: ", error);
@@ -34,7 +34,7 @@ export default class Blockchain {
     }
   
     getBlock(blockHeight) {
-      return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.reject();
+      return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.reject({type: "BAD_REQUEST"});
     }
   
     getBlockHeight() {
