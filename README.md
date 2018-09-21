@@ -6,13 +6,14 @@ This is a start implementation of a simple chain blockchain being cosumed by res
 
 ### Prerequisites
 
-You need the LTS verion of node installed in your machine. You can get it here : https://nodejs.org/en/
+You need the Node Version Manager (nvm) installed in your machine. You can get it here : https://github.com/creationix/nvm#installation
 
 ### Installing
 
-After having the node installed you can fork this project into your account and clone it. In the root folder of the project execute:
+After having the nvm installed you can fork this project into your account and clone it. In the root folder of the project execute:
 
 ```
+nvm install
 npm install
 ```
 
