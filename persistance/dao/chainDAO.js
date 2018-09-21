@@ -1,5 +1,5 @@
-const level = require('level');
-const chainDB = '../../chaindata';
+const level = require("level");
+const chainDB = "./chaindata";
 const db = level(chainDB);
 
 const get = key => {
@@ -22,10 +22,12 @@ const getCurrentBlock = () => {
     let returnBlock;
     db.createReadStream()
     .on('data', data => {
-      let block = JSON.parse(data.value);
-      if(!returnBlock || returnBlock.height < block.height) {
-        returnBlock = block;
-      }
+      if(data.value) {
+        let block = JSON.parse(data.value);
+        if(!returnBlock || returnBlock.height < block.height) {
+          returnBlock = block;
+        }
+      } 
     })
     .on('error', error => reject(error))
     .on('close', () => resolve(returnBlock))

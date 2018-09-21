@@ -7,50 +7,47 @@ export default class Blockchain {
       this.init();
     }
   
-    init() {
-      chainDB.getCurrentBlock().then(lastBlockOnDb => {
-        !lastBlockOnDb && this.generateGenesisBlock();
-      });
+    async init() {
+      try{
+        let lastBlockOnDb = await chainDB.getCurrentBlock();
+        !lastBlockOnDb && await this.generateGenesisBlock();
+      } catch(error) {
+        console.log(error);
+      }
     }
   
-    addBlock(newBlock) {
-      return new Promise(resolve => {
-        this.getBlockHeight()
-        .then(height => {
-          newBlock.height = height + 1;
-          newBlock.time = this.getCurrentTimeUTC();
-          this.getBlock(height).then(previousBlock => {
-            newBlock.previousBlockHash = previousBlock ? previousBlock.hash : "";
-            newBlock.hash = this.generateBlockHash(newBlock);
-            chainDB.add(newBlock).then(() => {
-              resolve(newBlock);
-            })
-            .catch(error => {
-              console.error("Unable to add the block " + newBlock.height + "Due to error: ", error);
-            });
-          });
-        });
-      });
+    async addBlock(newBlock) {
+      try {
+        let height = await this.getBlockHeight();
+        let previousBlock = await this.getBlock(height);
+
+        newBlock.height = height + 1;
+        newBlock.time = this.getCurrentTimeUTC();
+        newBlock.previousBlockHash = previousBlock ? previousBlock.hash : "";
+        newBlock.hash = this.generateBlockHash(newBlock);
+
+        await chainDB.add(newBlock);
+        return newBlock;
+      } catch (error) {
+        console.error(`Unable to add the block ${newBlock.height} Due to error: ${error}`);
+      }
+    }
+
+    async getBlockHeight() {
+      try {
+        let block = await chainDB.getCurrentBlock();
+        return !block ? -1 : block.height;
+      } catch(error) {
+        console.error(error);
+      }
     }
   
     getBlock(blockHeight) {
-      return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.reject({type: "BAD_REQUEST"});
+      return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.resolve();
     }
-  
-    getBlockHeight() {
-      return new Promise((resolve, reject) => {
-        chainDB.getCurrentBlock()
-        .then(block => {
-          let isFirstBlock = block ? false : true;
-          let blockHeight = isFirstBlock ? -1 : block.height;
-          resolve(blockHeight);
-        })
-        .catch(error => reject(error));
-      });
-    }
-  
+
     generateGenesisBlock() {
-      this.addBlock(new Block("Genesis"));
+      return this.addBlock(new Block("Genesis"));
     }
   
     generateBlockHash(block) {
