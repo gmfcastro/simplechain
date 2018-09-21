@@ -1,12 +1,12 @@
 {
-  "name": "project2",
+  "name": "simple-chain",
   "version": "1.0.0",
   "description": "Blockchain has the potential to change the way that the world approaches data. Develop Blockchain skills by understanding the data model behind Blockchain by developing your own simplified private blockchain.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .env/start.js"
   },
-  "author": "",
+  "author": "Guilherme NMF Castro",
   "license": "ISC",
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
