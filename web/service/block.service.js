@@ -1,4 +1,3 @@
-import Boom from "boom";
 import Block from "../../blockchain/block";
 
 export default class BlockService {

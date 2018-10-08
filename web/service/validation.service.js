@@ -1,9 +1,13 @@
-import Boom from "boom";
+import ValidationFactory from "../factory/validation.factory"
 
 export default class ValidationService {
 
-    constructor() {
+    constructor(mempoolService) {
+        this.mempoolService = mempoolService;
     }
 
-    validate() {}
+    newValidation(address) {
+        const validation = ValidationFactory.createValidation(address);
+        return this.mempoolService.addValidation(address, validation);
+    }
 }

@@ -6,7 +6,12 @@ export default class ValidationController {
         this.validationService = validationService;
     }
 
-    async postValidation(request, h) {
-        return "HELLO";
+    postValidation(request, h) {
+        const { payload } = request;
+        if(!payload) throw Boom.badRequest();
+        const { address } = payload;
+        if(!address) throw Boom.badRequest();
+
+        return this.validationService.newValidation(address);
     }
 }

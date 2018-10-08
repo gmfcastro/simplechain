@@ -1,7 +1,7 @@
 import Boom from "boom";
 import HttpStatus from "http-status-codes";
 
-export default class BlockController {
+export default class ValidationController {
     constructor(blockService) {
         this.blockService = blockService;
     }

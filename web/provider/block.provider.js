@@ -8,16 +8,12 @@ let controller = null;
 const blockchain = () => new Blockchain();
 
 const blockService = () => {
-    if(!service) {
-        service = new BlockService(blockchain());
-    }
+    if(!service) service = new BlockService(blockchain());
     return service;
 }
 
 const blockController = () => {
-    if(!controller) {
-        controller = new BlockController(blockService());
-    }
+    if(!controller) controller = new BlockController(blockService());
     return controller;
 }
 

@@ -1,4 +1,3 @@
-
 import { blockController } from "../provider/block.provider";
 
 export default [
