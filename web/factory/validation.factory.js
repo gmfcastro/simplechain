@@ -9,4 +9,10 @@ export default class ValidationFactory {
         const message = `${address}:${requestTimeStamp}:starRegistry`;
         return { address, requestTimeStamp, message, validationWindow };
     }
+
+    static createValidated(validationObject) {
+        const registerStar = true;
+        const status = Object.assign({}, {messageSignature: "valid"}, validationObject);
+        return { registerStar, status };
+    }
 }

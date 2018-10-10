@@ -2,6 +2,6 @@
     "dev" : {
         "host" : "localhost",
         "port" : "8000",
-        "validationWindow": 5000
+        "validationWindow": 50000
     }
 }
