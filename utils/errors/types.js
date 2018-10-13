@@ -1,0 +1,4 @@
+module.exports = {
+    INVALID_BLOCK: "INVALID_BLOCK",
+    UNAUTHORIZED: "UNAUTHORIZED"
+};
