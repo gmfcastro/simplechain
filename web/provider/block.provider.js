@@ -1,6 +1,7 @@
 import BlockService from "../service/block.service";
 import BlockController from "../controller/block.controller";
 import Blockchain from "../../blockchain/blockchain";
+import { validationService } from "./validation.provider"
 
 let service = null;
 let controller = null;
@@ -8,7 +9,7 @@ let controller = null;
 const blockchain = () => new Blockchain();
 
 const blockService = () => {
-    if(!service) service = new BlockService(blockchain());
+    if(!service) service = new BlockService(blockchain(), validationService);
     return service;
 }
 

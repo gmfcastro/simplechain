@@ -19,14 +19,12 @@ export default class MempoolService {
         }
     }
 
-    has(key) {
-        return this.mempool.has(key);
-    }
-
     get(key) {
         const object = this.mempool.get(key)
-        const enrichedData = this._updateValidationWindow(object);
-        return object.timeout ? enrichedData : object.data;
+        if(object) {
+            const enrichedData = this._updateValidationWindow(object);
+            return object.timeout ? enrichedData : object.data;
+        }
     }
 
     evict(key) {

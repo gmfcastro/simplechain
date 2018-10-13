@@ -14,7 +14,6 @@ export default class ValidationService {
 
     validate(address, signature) {
         const validationObject = this.mempoolService.get(address);
-        console.log("OBJKECT => ", validationObject);
         if (validationObject && !validationObject.registerStar) {
             if(this._isValid(validationObject, address, signature)) {
                 const validObject = ValidationFactory.createValidated(validationObject);
@@ -26,6 +25,11 @@ export default class ValidationService {
         }
         
         return validationObject;
+    }
+
+    isAuthorized(address) {
+        const validatedObject = this.mempoolService.get(address);
+        return validatedObject && validatedObject.registerStar;
     }
 
     _isValid(validationObject, address, signature) {
