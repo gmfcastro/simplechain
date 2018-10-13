@@ -13,15 +13,19 @@ export default class ValidationService {
     }
 
     validate(address, signature) {
-        if (this.mempoolService.has(address)) {
-            let validationObject = this.mempoolService.get(address);
+        const validationObject = this.mempoolService.get(address);
+        console.log("OBJKECT => ", validationObject);
+        if (validationObject && !validationObject.registerStar) {
             if(this._isValid(validationObject, address, signature)) {
-                this.mempoolService.evict(address);
-                return ValidationFactory.createValidated(validationObject);
+                const validObject = ValidationFactory.createValidated(validationObject);
+                this.mempoolService.evictAndReplace(address, validObject);
+                return validObject;
             }
+
+            throw new Error("INVALID");
         }
         
-        throw new Error("INVALID");
+        return validationObject;
     }
 
     _isValid(validationObject, address, signature) {
@@ -31,15 +35,9 @@ export default class ValidationService {
     _isValidSignature(validationObject, address, signature) {
         const { message } = validationObject;
         return bitcoin.verify(message, address, signature);
-    }
+   } 
 
     _isValidWidow(validationObject) {
-        const { 
-            validationWindow,
-            requestTimeStamp
-        } = validationObject;
-        const currentTimeStamp = Date.now();
-        const validTimeStamp = validationWindow + requestTimeStamp;
-        return currentTimeStamp <= validTimeStamp;
+        return validationObject.validationWindow > 0;
     }
 }
