@@ -46,6 +46,10 @@ export default class Blockchain {
       return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.resolve();
     }
 
+    getBlockBy(filter) {
+      return chainDB.getBy(filter);
+    }
+    
     generateGenesisBlock() {
       return this.addBlock(new Block("Genesis"));
     }

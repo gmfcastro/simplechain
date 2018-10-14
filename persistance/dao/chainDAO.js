@@ -17,6 +17,26 @@ const get = key => {
   });
 }
 
+const getBy = filter => {
+  return new Promise((resolve, reject) => {
+    let returnBlocks = [];
+    db.createReadStream()
+    .on('data', data => {
+      if(data.value) {
+        const block = JSON.parse(data.value);
+        const body = block.body;
+        for(let prop in filter) {
+          if(filter[prop] && (body[prop] == filter[prop] || block[prop] == filter[prop])) {
+            returnBlocks.push(block);
+          }
+        }
+      } 
+    })
+    .on('error', error => reject(error))
+    .on('close', () => resolve(returnBlocks))
+  });
+}
+
 const getCurrentBlock = () => {
   return new Promise((resolve, reject) => {
     let returnBlock;
@@ -44,8 +64,4 @@ const add = block => {
   })
 }
 
-module.exports = {
-  add: add,
-  get: get,
-  getCurrentBlock: getCurrentBlock
-}
+module.exports = { add, get, getBy, getCurrentBlock }
