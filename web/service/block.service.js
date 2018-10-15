@@ -9,8 +9,9 @@ export default class BlockService {
         this.validationService = validationService;
     }
 
-    getBlockByHeight(height) {
-        return this.blockchain.getBlock(height);
+    async getBlockByHeight(height) {
+        const block = await this.blockchain.getBlock(height);
+        return BlockFactory.createStarBlockResponse([block]);
     }
 
     async addStarBlock(block) {
