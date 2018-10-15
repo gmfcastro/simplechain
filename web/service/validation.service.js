@@ -1,5 +1,7 @@
 import ValidationFactory from "../factory/validation.factory"
 import bitcoin from "bitcoinjs-message"
+import ValidationException from "../../utils/errors/validation.exception"
+import { INVALID, VALIDATION_NOT_FOUND } from "../../utils/errors/types"
 
 export default class ValidationService {
 
@@ -14,17 +16,32 @@ export default class ValidationService {
 
     validate(address, signature) {
         const validationObject = this.mempoolService.get(address);
-        if (validationObject && !validationObject.registerStar) {
-            if(this._isValid(validationObject, address, signature)) {
-                const validObject = ValidationFactory.createValidated(validationObject);
-                this.mempoolService.evictAndReplace(address, validObject);
-                return validObject;
-            }
+        if(!validationObject) {
+            throw new ValidationException(VALIDATION_NOT_FOUND, "Validation not found, request one first");
+        }
 
-            throw new Error("INVALID");
+        if (!validationObject.registerStar) {
+            try {
+                if(this._isValid(validationObject, address, signature)) {
+                    const validObject = ValidationFactory.createValidated(validationObject);
+                    this.mempoolService.evictAndReplace(address, validObject);
+                    return validObject;
+                }
+
+                throw new ValidationException(INVALID, "Signature is not valid");
+            } catch(error) {
+                throw new ValidationException(INVALID, error.message);
+            }
         }
         
         return validationObject;
+    }
+
+    unauthorize(address) {
+        const validatedObject = this.mempoolService.get(address);
+        if (validatedObject && validatedObject.registerStar) {
+            this.mempoolService.evict(address);
+        }
     }
 
     isAuthorized(address) {

@@ -14,12 +14,13 @@ export default class BlockService {
         return this.blockchain.getBlock(height);
     }
 
-    addStarBlock(block) {
+    async addStarBlock(block) {
         if(!this.validationService.isAuthorized(block.address)) {
             throw new BlockException(UNAUTHORIZED, "Validate first");
         }
-        
-        let newBlock = BlockFactory.createStarBlock(block)
-        return this.blockchain.addBlock(newBlock);
+        const newBlock = BlockFactory.createStarBlock(block);
+        const addedBlock = await this.blockchain.addBlock(newBlock);
+        this.validationService.unauthorize(block.address);
+        return addedBlock;
     }
 }

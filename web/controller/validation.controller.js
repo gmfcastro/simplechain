@@ -1,5 +1,6 @@
 import Boom from "boom";
 import HttpStatus from "http-status-codes";
+import { INVALID, VALIDATION_NOT_FOUND } from "../../utils/errors/types"
 
 export default class ValidationController {
     constructor(validationService) {
@@ -7,12 +8,12 @@ export default class ValidationController {
     }
 
     postNewValidation(request, h) {
-        try {
-            const { payload } = request;
-            if(!payload) throw Boom.badRequest();
-            const { address } = payload;
-            if(!address) throw Boom.badRequest();
+        const { payload } = request;
+        if(!payload) throw Boom.badRequest();
+        const { address } = payload;
+        if(!address) throw Boom.badRequest();
 
+        try {
             const data = this.validationService.newValidation(address);
             return h.response(data).code(HttpStatus.OK);
         } catch (error) {
@@ -22,16 +23,17 @@ export default class ValidationController {
     }
 
     postValidate(request) {
-        try {
-            const { payload } = request;
-            if(!payload) throw Boom.badRequest();
-            const { address, signature } = payload;
-            if(!address || !signature) throw Boom.badRequest();
+        const { payload } = request;
+        if(!payload) throw Boom.badRequest();
+        const { address, signature } = payload;
+        if(!address || !signature) throw Boom.badRequest();
 
+        try {
             return this.validationService.validate(address, signature);
         } catch (error) {
-            switch(error.message) {
-                case "INVALID": throw Boom.unauthorized(error.message);
+            switch(error.type) {
+                case INVALID: throw Boom.unauthorized(error.message);
+                case VALIDATION_NOT_FOUND: throw Boom.unauthorized(error.message);
                 default: {
                     console.error(error.stack);
                     throw Boom.internal();

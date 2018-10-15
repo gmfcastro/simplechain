@@ -1,3 +1,5 @@
+import { BLOCK_NOT_FOUND } from "../../utils/errors/types"
+
 const level = require("level");
 const chainDB = "./chaindata";
 const db = level(chainDB);
@@ -8,7 +10,7 @@ const get = key => {
       if (error) {
         let returnError = error;
         if(error instanceof level.errors.NotFoundError) {
-          returnError = Object.assign({type: "NOT_FOUND"} ,error);
+          returnError = Object.assign({type: BLOCK_NOT_FOUND} ,error);
         }
         reject(returnError);
       }

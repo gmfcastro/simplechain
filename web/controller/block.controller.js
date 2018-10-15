@@ -1,6 +1,6 @@
 import Boom from "boom";
 import HttpStatus from "http-status-codes";
-import { INVALID_BLOCK, UNAUTHORIZED } from "../../utils/errors/types"
+import { INVALID_BLOCK, UNAUTHORIZED, BLOCK_NOT_FOUND } from "../../utils/errors/types"
 
 export default class ValidationController {
     constructor(blockService) {
@@ -9,7 +9,6 @@ export default class ValidationController {
 
     async getBlockHeight(request, h) {
         const { height } = request.params;
-
         if(!height || height < 0) throw Boom.badRequest();
 
         try {
@@ -17,9 +16,11 @@ export default class ValidationController {
             return h.response(data).code(HttpStatus.OK);
         } catch (error) {
             switch(error.type) {
-              case "BAD_REQUEST": throw Boom.badRequest();
-              case "NOT_FOUND": throw Boom.notFound();
-              default: throw Boom.internal();
+              case BLOCK_NOT_FOUND: throw Boom.notFound();
+              default: {
+                console.error(error.stack);
+                throw Boom.internal();
+              }
             } 
         }
     }
@@ -35,7 +36,10 @@ export default class ValidationController {
             switch(error.type) {
                 case UNAUTHORIZED: throw Boom.unauthorized(error.message);
                 case INVALID_BLOCK: throw Boom.badRequest(error.message);
-                default: throw Boom.internal();
+                default: {
+                    console.error(error.stack);
+                    throw Boom.internal();
+                }
             }
         }
     }
