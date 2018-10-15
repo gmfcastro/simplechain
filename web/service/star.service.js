@@ -1,4 +1,5 @@
 import BlockException from "../../utils/errors/block.exception";
+import BlockFactory from "../factory/block.factory";
 import { BLOCK_NOT_FOUND } from "../../utils/errors/types";
 
 export default class StarService {
@@ -9,6 +10,6 @@ export default class StarService {
     async getStarFilteredBy(filter) {
         const stars = await this.blockchain.getBlockBy(filter) || [];
         if(stars.length == 0) throw new BlockException(BLOCK_NOT_FOUND, "Star not found");
-        return stars.length == 1 ? stars[0] : stars;
+        return BlockFactory.createStarBlockResponse(stars);
     }
 }
