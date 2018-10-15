@@ -22,6 +22,14 @@ And to start the project you need to run:
 npm start
 ```
 
+### Running tests
+
+After having all node dependencies installed you can run:
+
+```
+npm test
+```
+
 ### Configuration
 
 Inside of the project you have a .env folder that contains a config folder inside with a json that you can add your enviroments configurations of host and port:
@@ -45,11 +53,53 @@ ENV=<YOUR_ENV> npm start
 
 ### GET /block/{block_height}
 
-In this enspoint you can get the block height disared by appsing at the end of path param;
+In this endpoint you can get the block height disared by passing at the end of path param;
+
+### GET /stars/address:{address}
+
+In this endpoint you can get the block by the wallet address disared by passing at the end of path param;
+
+### GET /stars/hash:{hash}
+
+In this endpoint you can get the block by the hash disared by passing at the end of path param;
 
 ### POST /block
 
-In this enpoin you can add a new block to the chain the body should contain some data to be able to add the bew block
+In this enpoint you can add a new block (Star Registry) to the chain the body should contain some data following this:
+
+```
+{
+	"address": <WALLET_ADDRESS>, (REQUIRED)
+	"star":  {
+		"ra": "<RIGHT_ASCESION>", (REQUIRED)
+		"dec": "<DECLINATION>", (REQUIRED)
+		"story": "<STORY>" (REQUIRED, max of 250 words / 500 bytes ),
+        "mag": "<MAGNITUDE>" (OPTIONAL),
+        "cons": "<CONSTELATION>" (OPTIONAL)
+	}
+}
+```
+
+## POST /requestValidation
+
+In this endpoint is where you start asking for a star registration in the block. You should pass: 
+
+```
+{
+	"address": <WALLET_ADDRESS>, (REQUIRED)
+}
+```
+
+## POST /message-signature/validate
+
+After asking for a validation you shoul sign the message returned /requestValidation endpoint and call this endpoint with: 
+
+```
+{
+	"address": <WALLET_ADDRESS>, (REQUIRED)
+    "signature": <SIGNED_MESSAGE> (REQUIRED)
+}
+```
 
 ## Built With
 * [Node.js](https://nodejs.org/)
