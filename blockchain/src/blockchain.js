@@ -1,5 +1,5 @@
 import SHA256 from "crypto-js/sha256"
-import chainDB from "../persistance/dao/chainDAO"
+import chainDB from "../../persistance/dao/chain.dao"
 import Block from "./block"
 
 export default class Blockchain {

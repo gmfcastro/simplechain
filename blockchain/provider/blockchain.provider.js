@@ -1,5 +1,5 @@
-import Blockchain from "../blockchain";
-import chainDAO from "../../persistance/dao/chainDAO"
+import Blockchain from "../src/blockchain";
+import chainDAO from "../../persistance/dao/chain.dao"
 
 let component = null;
 

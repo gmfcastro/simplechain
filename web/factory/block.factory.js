@@ -1,6 +1,6 @@
 import { INVALID_BLOCK } from "../../utils/errors/types"
 import BlockException from "../../utils/errors/block.exception"
-import Block from "../../blockchain/block"
+import Block from "../../blockchain/src/block"
 
 export default class BlockFactory {
     constructor() {}
@@ -12,7 +12,7 @@ export default class BlockFactory {
             const starStory = this._validStoryAndEncode(star.story);
             starObject.story = starStory;
         }
-        
+
         return new Block({ address, starObject });
     }
 

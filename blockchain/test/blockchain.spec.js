@@ -1,9 +1,9 @@
 import chai from "chai"
 import sinon from "sinon"
-import Block from "../../blockchain/block"
-import Blockchain from "../../blockchain/blockchain"
-import chainDao from "../../persistance/dao/chainDAO"
-import { promisedDelay } from "../utils/testutils"
+import Block from "../src/block"
+import Blockchain from "../src/blockchain"
+import chainDao from "../../persistance/dao/chain.dao"
+import { promisedDelay } from "../../utils/test/testutils"
 
 const expect = chai.expect;
 

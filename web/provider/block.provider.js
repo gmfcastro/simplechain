@@ -1,6 +1,6 @@
 import BlockService from "../service/block.service";
 import BlockController from "../controller/block.controller";
-import Blockchain from "../../blockchain/blockchain";
+import Blockchain from "../../blockchain/src/blockchain";
 import { validationService } from "./validation.provider"
 
 let service = null;

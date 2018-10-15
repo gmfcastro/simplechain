@@ -1,4 +1,3 @@
-import Block from "../../blockchain/block";
 import BlockFactory from "../factory/block.factory";
 import BlockException from "../../utils/errors/block.exception"
 import { UNAUTHORIZED } from "../../utils/errors/types"

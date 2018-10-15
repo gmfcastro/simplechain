@@ -1,5 +1,5 @@
-import MempoolService from "../mempool.service"
-import mempool from "../mempool"
+import MempoolService from "../src/mempool.service"
+import mempool from "../src/mempool"
 
 let service = null
 

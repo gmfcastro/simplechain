@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Blockchain has the potential to change the way that the world approaches data. Develop Blockchain skills by understanding the data model behind Blockchain by developing your own simplified private blockchain.",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha test/**/*.js --compilers js:babel-core/register",
+    "test": "node_modules/mocha/bin/mocha './{,!(node_modules)/**/}*.spec.js' --compilers js:babel-core/register",
     "start": "node .env/start.js"
   },
   "author": "Guilherme NMF Castro",
