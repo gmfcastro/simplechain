@@ -116,6 +116,25 @@ describe("Blockchain's get block tests", () => {
         expect(block).to.be.deep.equals({});
     });
 
+    it("should return empty array from DAO when trying to get block without filter", async () => {
+        sandbox.stub(chainDao, "getBy").resolves([]);
+        const blockchain = new Blockchain(chainDao);
+
+        const blocks = await blockchain.getBlockBy({});
+
+        expect(blocks).to.be.deep.equals([]);
+    });
+
+    it("should return array from DAO when trying to get block with filter", async () => {
+        const hash = "hash";
+        sandbox.stub(chainDao, "getBy").withArgs({ hash }).resolves([ {} ]);
+        const blockchain = new Blockchain(chainDao);
+
+        const blocks = await blockchain.getBlockBy({ hash });
+
+        expect(blocks.length).to.be.equals(1);
+    });
+
     afterEach(() => {
         sandbox.restore();
     });
