@@ -1,15 +1,15 @@
 import SHA256 from "crypto-js/sha256"
-import chainDB from "../../persistance/dao/chain.dao"
 import Block from "./block"
 
 export default class Blockchain {
-    constructor() {
+    constructor(chainDao) {
+      this.chainDao = chainDao;
       this.init();
     }
   
     async init() {
       try{
-        let lastBlockOnDb = await chainDB.getCurrentBlock();
+        let lastBlockOnDb = await this.chainDao.getCurrentBlock();
         !lastBlockOnDb && await this.generateGenesisBlock();
       } catch(error) {
         console.log(error);
@@ -26,7 +26,7 @@ export default class Blockchain {
         newBlock.previousBlockHash = previousBlock ? previousBlock.hash : "";
         newBlock.hash = this.generateBlockHash(newBlock);
 
-        await chainDB.add(newBlock);
+        await this.chainDao.add(newBlock);
         return newBlock;
       } catch (error) {
         console.error(`Unable to add the block ${newBlock.height} Due to error: ${error}`);
@@ -35,7 +35,7 @@ export default class Blockchain {
 
     async getBlockHeight() {
       try {
-        let block = await chainDB.getCurrentBlock();
+        let block = await this.chainDao.getCurrentBlock();
         return !block ? -1 : block.height;
       } catch(error) {
         console.error(error);
@@ -43,11 +43,11 @@ export default class Blockchain {
     }
   
     getBlock(blockHeight) {
-      return blockHeight >= 0 ? chainDB.get(blockHeight) : Promise.resolve();
+      return blockHeight >= 0 ? this.chainDao.get(blockHeight) : Promise.resolve();
     }
 
     getBlockBy(filter) {
-      return chainDB.getBy(filter);
+      return this.chainDao.getBy(filter);
     }
     
     generateGenesisBlock() {
@@ -64,7 +64,7 @@ export default class Blockchain {
   
     validateBlock(blockHeight) {
       return new Promise(resolve => {
-        chainDB.get(blockHeight).then(block => {
+        this.chainDao.get(blockHeight).then(block => {
           let blockClone = Object.assign({}, block);
           let blockHash = block.hash;
           blockClone.hash = '';
@@ -80,7 +80,7 @@ export default class Blockchain {
     }
   
     validateChain() {
-      chainDB.getCurrentBlock().then(currentBlock => {
+      this.chainDao.getCurrentBlock().then(currentBlock => {
         let chainLenght = currentBlock.height;
         let errorLog = [];
         (function loop(index) {

@@ -13,7 +13,7 @@ export default class ValidationController {
 
         try {
             let data = await this.blockService.getBlockByHeight(height);
-            return h.response(data).code(HttpStatus.OK);
+            return h.response(data[0]).code(HttpStatus.OK);
         } catch (error) {
             switch(error.type) {
               case BLOCK_NOT_FOUND: throw Boom.notFound();

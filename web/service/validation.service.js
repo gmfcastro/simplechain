@@ -10,6 +10,9 @@ export default class ValidationService {
     }
 
     newValidation(address) {
+        const validationInMempool = this.mempoolService.get(address);
+        if(validationInMempool) return validationInMempool;
+
         const validation = ValidationFactory.createValidation(address);
         return this.mempoolService.add(address, validation, validation.validationWindow);
     }

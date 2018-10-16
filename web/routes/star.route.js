@@ -9,6 +9,6 @@ export default [
     {
         method: "GET",
         path: "/stars/address:{address}",
-        handler: (request, h) => starController.getStar(request, h)
+        handler: (request, h) => starController.getStars(request, h)
     }
 ]

@@ -1,15 +1,19 @@
+/**
+ * Here is where is created the dependency injection of Blockservice and Blockcontroller
+ * The service and controller should be singleton components.
+ * All places that will use one of those components always should get it from here
+ */
+
 import BlockService from "../service/block.service";
 import BlockController from "../controller/block.controller";
-import Blockchain from "../../blockchain/src/blockchain";
+import { blockchain } from "../../blockchain/provider/blockchain.provider"
 import { validationService } from "./validation.provider"
 
 let service = null;
 let controller = null;
 
-const blockchain = () => new Blockchain();
-
 const blockService = () => {
-    if(!service) service = new BlockService(blockchain(), validationService);
+    if(!service) service = new BlockService(blockchain, validationService);
     return service;
 }
 

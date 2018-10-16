@@ -9,8 +9,24 @@ export default class StarController {
 
     async getStar(request, h) {
         try {
-        const { hash, address } = request.params;
-        const stars = await this.starService.getStarFilteredBy({hash, address});
+        const { hash } = request.params;
+        const stars = await this.starService.getStarFilteredBy({ hash });
+        return h.response(stars[0]).code(HttpStatus.OK);
+        } catch(error) {
+            switch(error.type) {
+                case BLOCK_NOT_FOUND: throw Boom.notFound(error.message);
+                default: {
+                    console.error(error.stack);
+                    throw Boom.internal();
+                }
+            }
+        }
+    }
+
+    async getStars(request, h) {
+        try {
+        const { address } = request.params;
+        const stars = await this.starService.getStarFilteredBy({ address });
         return h.response(stars).code(HttpStatus.OK);
         } catch(error) {
             switch(error.type) {

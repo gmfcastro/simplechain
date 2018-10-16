@@ -18,7 +18,6 @@ export default class BlockFactory {
     }
 
     static createStarBlockResponse(blocks) {
-        if(blocks.length == 1) return this._enrichWithDecodedStory(blocks[0]);
         return blocks.map(block => this._enrichWithDecodedStory(block));
     }
 
